@@ -1,0 +1,61 @@
+# BASHRC File
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# ----------------------------------------------------------------------
+# Command History setup
+# ----------------------------------------------------------------------
+
+# do not override bash history file (append to it)
+shopt -s histappend
+# autocorrect typos during cd calls
+shopt -s cdspell
+# check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+# put multi-line commands onto one line of history
+shopt -s cmdhist
+# turn on confirmation for history expansion (histexpand)
+shopt -s histverify
+
+HISTIGNORE="&:[ ]*:exit"
+HISTSIZE=1000000
+HISTFILESIZE=1000000
+# don't put duplicate lines in the history. See bash(1) for more options
+HISTCONTROL=ignoredups:ignorespace
+export HISTFILESIZE HISTSIZE HISTIGNORE HISTCONTROL
+
+# ----------------------------------------------------------------------
+# General
+# ----------------------------------------------------------------------
+
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
+
+# for vim's colors
+export TERM=xterm-256color
+
+# Add $HOME/bin to PATH
+PATH="${HOME}/bin:/workspace/bin:${PATH}"
+PATH="${HOME}/.local/bin:${PATH}"
+export PATH
+
+# ----------------------------------------------------------------------
+# Auto-completes
+# ----------------------------------------------------------------------
+
+complete -cf sudo
+complete -cf which
+complete -cf man
+complete -W "echo $(cat /etc/hosts | grep '^10.9[2,3]' | awk '{print $2}' | sort -u)" spl
+
+# ----------------------------------------------------------------------
+# Load all our BASHRC snippets
+# ----------------------------------------------------------------------
+
+for next_snippet in $(ls -1 ${HOME}/etc/bash/*.bash)
+do
+    . "$next_snippet"
+done
+
+
